@@ -4,7 +4,7 @@ Responsive English/Hausa mosque website, built from the supplied handoff kit. Of
 
 ## Run and verify
 
-Node 22 is recommended (Node 20.9 also builds locally).
+Use Node 22.13 or newer for the development toolchain (CI uses Node 22).
 
 ```sh
 npm ci

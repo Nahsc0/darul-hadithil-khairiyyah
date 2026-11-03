@@ -1,4 +1,10 @@
-import { beforeAll, afterAll, describe, it, expect } from "vitest";
+import {
+  before as beforeAll,
+  after as afterAll,
+  describe,
+  it,
+} from "node:test";
+import assert from "node:assert/strict";
 import { PGlite } from "@electric-sql/pglite";
 import { readFileSync } from "node:fs";
 // Execute the real migration in PostgreSQL WASM with minimal Supabase-owned schemas.
@@ -6,8 +12,9 @@ const db = new PGlite();
 const admin = "11111111-1111-4111-8111-111111111111";
 const editor = "22222222-2222-4222-8222-222222222222";
 const outsider = "33333333-3333-4333-8333-333333333333";
-beforeAll(async () => {
-  await db.exec(`create role anon; create role authenticated; create schema auth; create schema storage;
+beforeAll(
+  async () => {
+    await db.exec(`create role anon; create role authenticated; create schema auth; create schema storage;
  create table auth.users(id uuid primary key);
  create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
  grant usage on schema auth,storage to anon,authenticated;
@@ -17,12 +24,14 @@ beforeAll(async () => {
  alter table storage.objects enable row level security;
  grant select,insert,update,delete on storage.objects to anon,authenticated;
  insert into auth.users values('${admin}'),('${editor}'),('${outsider}');`);
-  await db.exec(readFileSync("supabase/001_schema.sql", "utf8"));
-  await db.exec(`insert into public.profiles values('${admin}','admin'),('${editor}','editor');
+    await db.exec(readFileSync("supabase/001_schema.sql", "utf8"));
+    await db.exec(`insert into public.profiles values('${admin}','admin'),('${editor}','editor');
  insert into content(kind,slug,title_en,title_ha,body_en,body_ha,status,date) values
  ('event','public-event','Public event','Taro','Body','Rubutu','published','2026-10-30'),
  ('article','staff-draft','Draft','Daftari','','','draft','2026-11-03');`);
-}, 30000);
+  },
+  { timeout: 30000 },
+);
 afterAll(async () => {
   await db.close();
 });
@@ -32,16 +41,14 @@ async function as(role: string, id: string, sql: string) {
   await db.exec(`set role ${role}`);
   return db.query(sql);
 }
-describe.sequential("database security boundaries", () => {
+describe("database security boundaries", () => {
   it("anonymous readers see published content only", async () => {
     const r = await as("anon", "", "select slug from content");
-    expect(r.rows).toEqual([{ slug: "public-event" }]);
+    assert.deepEqual(r.rows, [{ slug: "public-event" }]);
   });
   it("anonymous writes and TRUNCATE are denied", async () => {
-    await expect(as("anon", "", "delete from content")).rejects.toThrow();
-    await expect(
-      as("authenticated", admin, "truncate content"),
-    ).rejects.toThrow();
+    await assert.rejects(as("anon", "", "delete from content"));
+    await assert.rejects(as("authenticated", admin, "truncate content"));
   });
   it("editors read drafts but cannot publish or change settings", async () => {
     const r = await as(
@@ -49,34 +56,34 @@ describe.sequential("database security boundaries", () => {
       editor,
       "select slug from content order by slug",
     );
-    expect(r.rows).toHaveLength(2);
-    await expect(
+    assert.equal(r.rows.length, 2);
+    await assert.rejects(
       as(
         "authenticated",
         editor,
         "update content set status='published',body_en='test',body_ha='rubutu',author='Editor' where slug='staff-draft'",
       ),
-    ).rejects.toThrow();
+    );
     const change = await as(
       "authenticated",
       editor,
       "update settings set value='{}' where id='public' returning id",
     );
-    expect(change.rows).toHaveLength(0);
+    assert.equal(change.rows.length, 0);
   });
   it("staff cannot grant themselves another role", async () => {
-    await expect(
+    await assert.rejects(
       as("authenticated", editor, "update profiles set role='admin'"),
-    ).rejects.toThrow();
+    );
   });
   it("users without a staff role cannot create content", async () => {
-    await expect(
+    await assert.rejects(
       as(
         "authenticated",
         outsider,
         "insert into content(kind,slug,title_en,title_ha,date) values('event','blocked','x','y','2026-11-03')",
       ),
-    ).rejects.toThrow();
+    );
   });
   it("editors can save a draft and admins can publish it", async () => {
     await as(
@@ -89,25 +96,25 @@ describe.sequential("database security boundaries", () => {
       admin,
       "update content set status='published' where slug='staff-draft' returning status",
     );
-    expect(r.rows).toEqual([{ status: "published" }]);
+    assert.deepEqual(r.rows, [{ status: "published" }]);
   });
   it("server rejects incomplete publication", async () => {
-    await expect(
+    await assert.rejects(
       as(
         "authenticated",
         admin,
         "insert into content(kind,slug,title_en,title_ha,status,date) values('article','incomplete','x','y','published','2026-11-03')",
       ),
-    ).rejects.toThrow();
+    );
   });
   it("only admins upload images and see the content audit trail", async () => {
-    await expect(
+    await assert.rejects(
       as(
         "authenticated",
         editor,
         "insert into storage.objects(bucket_id,name) values('media','blocked.png')",
       ),
-    ).rejects.toThrow();
+    );
     await as(
       "authenticated",
       admin,
@@ -118,8 +125,8 @@ describe.sequential("database security boundaries", () => {
       admin,
       "select action from audit_log where action like 'content:UPDATE:%'",
     );
-    expect(audit.rows.length).toBeGreaterThan(0);
+    assert.ok(audit.rows.length > 0);
     const hidden = await as("authenticated", editor, "select * from audit_log");
-    expect(hidden.rows).toHaveLength(0);
+    assert.equal(hidden.rows.length, 0);
   });
 });

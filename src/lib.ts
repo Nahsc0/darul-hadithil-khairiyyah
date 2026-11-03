@@ -36,16 +36,15 @@ export const defaultSettings: Settings = {
   mission_ha:
     "Wurin ibada, koyon ilimin Musulunci da haɗin kan al’umma a Kabama Layout, Zariya.",
 };
-const env = import.meta.env;
+const env = import.meta.env || {};
 export const supabase =
   env.VITE_SUPABASE_URL && env.VITE_SUPABASE_ANON_KEY
     ? createClient(env.VITE_SUPABASE_URL, env.VITE_SUPABASE_ANON_KEY)
     : null;
 export const asset = (path: string) =>
-  `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
-export const poster = Object.keys(import.meta.glob("/public/assets/posters/*"))
-  .map((p) => p.replace("/public/", ""))
-  .find((p) => p.includes("/18-"))!;
+  `${env.BASE_URL || "/"}${path.replace(/^\//, "")}`;
+export const poster =
+  "assets/posters/18-poster_graphic_design_a_clean_modern_profession.png";
 export const seedRecords: RecordItem[] = [
   {
     id: "seed-event",
