@@ -1,0 +1,112 @@
+{
+  "identity": {
+    "name": "Darul Hadithil Khairiyyah",
+    "location": "Kabama Layout, Zaria, Kaduna State, Nigeria",
+    "phone": ["+2348062292438", "+2347038889325"],
+    "facebook_display_name": "Umar Kamaludeen",
+    "facebook_url": null,
+    "youtube_url": null,
+    "tiktok_url": null,
+    "website_url": null,
+    "tagline": "Knowledge • Worship • Community"
+  },
+  "speakers": [
+    {
+      "name": "Mallam Muhammad Auwal Mai Shago",
+      "role": "Islamic lecture speaker",
+      "photo": "assets/originals/muhammad-auwal-mai-shago.jpeg"
+    },
+    {
+      "name": "Mallam Kamaluddeen Umar Esq",
+      "role": "Jumu’ah khutbah speaker",
+      "sermon_topic": "At-Taqwa",
+      "photo": "assets/originals/kamaluddeen-umar-esq.jpeg"
+    }
+  ],
+  "weekly_lectures": {
+    "friday": [
+      {
+        "when": "2:30 PM–3:30 PM",
+        "title": "Ummahātun Rabbaina Ulamā",
+        "audience": "Women"
+      },
+      {
+        "when": "After Maghrib",
+        "title": "Tafseer of the Glorious Quran"
+      },
+      {
+        "when": "After Isha",
+        "title": "Attabsirah fee ulúmil Quran"
+      }
+    ],
+    "saturday": [
+      {
+        "when": "After Fajr",
+        "title": "Al-Lu’lu’ul Maknūn fī Sīratin Nabiyyil Ma’mūn"
+      },
+      {
+        "when": "After Asr, 4:30 PM–5:45 PM",
+        "title": "Al-ʿUbūdiyyah"
+      },
+      {
+        "when": "After Maghrib",
+        "title": "Al-La’āli’ al-Muḍī’ah"
+      },
+      {
+        "when": "After Isha",
+        "title": "Mustalahul Hadeeth"
+      }
+    ],
+    "sunday": [
+      {
+        "when": "After Fajr",
+        "title": "Ahkamul jana’iz wa bida’uha"
+      },
+      {
+        "when": "After Asr",
+        "title": "Aqidatu Salaf wa Ashab ul-Hadith / Tazkiratul Muta’allimeen"
+      },
+      {
+        "when": "After Maghrib",
+        "title": "Sharhus-Sunnah of Imam Al Barbahaari / Sifatus-Salatin-Nabiyy"
+      },
+      {
+        "when": "After Isha",
+        "title": "Al-Usul-min ilmil usuul"
+      }
+    ]
+  },
+  "other_masjids": [
+    {
+      "name": "Masjidul Sahaaba Kwangila",
+      "lecture": "Kitabut-tauheed",
+      "recurrence": "Every two weeks"
+    },
+    {
+      "name": "Kabama Masjid Maraba",
+      "lecture": "Adabul Mufrad",
+      "recurrence": "First Saturday of every month"
+    },
+    {
+      "name": "Masjidut-tauheed Kabama",
+      "lecture": "Dariqus-salihin",
+      "recurrence": "Last Sunday of every month"
+    }
+  ],
+  "past_events": [
+    {
+      "title": "Jumu’ah Prayer and Islamic Lecture",
+      "date": "2026-10-30",
+      "hijri_date_as_provided": "19 Jumada al-Ula 1448 AH",
+      "status": "past",
+      "khutbah_time": "12:00",
+      "prayer_time": "12:30",
+      "khutbah_speaker": "Mallam Kamaluddeen Umar Esq",
+      "khutbah_topic": "At-Taqwa",
+      "lecture_time": "After Maghrib until Isha",
+      "lecture_speaker": "Mallam Muhammad Auwal Mai Shago",
+      "lecture_topic_en": "The Importance of Establishing an Islamic Centre in the Community",
+      "lecture_topic_ha": "Muhimmancin Kafa cibiya ta Musulunci a ƙasa"
+    }
+  ]
+}
