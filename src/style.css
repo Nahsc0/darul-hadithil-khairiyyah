@@ -1753,3 +1753,64 @@ input[type="checkbox"] {
     scroll-behavior: auto !important;
   }
 }
+
+.intake > h1 {
+  margin-bottom: 1rem;
+}
+.intake > .button {
+  margin-top: 1.5rem;
+}
+.intake-form {
+  max-width: 42rem;
+}
+.intake-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: grid;
+  gap: 1rem;
+}
+.intake-form label {
+  display: grid;
+  gap: 0.35rem;
+}
+.intake-form button {
+  justify-self: start;
+}
+.student-id {
+  overflow-wrap: anywhere;
+}
+.calendar-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+.calendar-controls h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+  text-align: center;
+}
+.calendar-grid time {
+  background: #f5f1e7;
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  padding: 0.45rem 0.15rem;
+  min-height: 4.5rem;
+}
+.calendar-grid time[aria-current] {
+  outline: 2px solid #24563f;
+  outline-offset: -2px;
+}
+.calendar-grid small {
+  overflow-wrap: anywhere;
+  font-size: 0.72rem;
+}

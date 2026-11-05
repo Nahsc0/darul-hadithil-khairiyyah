@@ -38,6 +38,7 @@ import {
   youtubeEmbed,
 } from "./lib";
 import Admin from "./Admin";
+import { Calendar, Education, IntakeForm } from "./Community";
 type T = (en: string, ha: string) => string;
 const nav = [
   ["/", "Home", "Gida"],
@@ -46,6 +47,8 @@ const nav = [
   ["/events", "Events", "Taro"],
   ["/blog", "Journal", "Rubuce-rubuce"],
   ["/videos", "Videos", "Bidiyo"],
+  ["/calendar", "Calendar", "Kalanda"],
+  ["/education", "Education", "Ilimi"],
 ];
 export default function App() {
   const [locale, setLocale] = useState<Locale>(() =>
@@ -392,6 +395,12 @@ export default function App() {
               })}
             </section>
           </>
+        ) : path === "/calendar" ? (
+          <Calendar t={t} locale={locale} />
+        ) : path === "/education" ? (
+          <Education t={t} />
+        ) : path === "/register" || path === "/requests" ? (
+          <IntakeForm key={path} t={t} student={path === "/register"} />
         ) : path === "/contact" ? (
           <>
             <PageHead
@@ -406,11 +415,7 @@ export default function App() {
               <div className="contact-card">
                 <MapPin />
                 <h2>{t("Find us in Zaria", "Ku same mu a Zariya")}</h2>
-                <p>
-                  Kabama Layout, Zaria
-                  <br />
-                  Kaduna State, Nigeria
-                </p>
+                <p>{seed.identity.location}</p>
                 <p className="muted">
                   {t(
                     "Call for directions before your first visit.",
@@ -430,6 +435,9 @@ export default function App() {
                     "Maraba da ku.\nKu kira mu.",
                   )}
                 </h2>
+                <a className="button" href="#/requests">
+                  {t("Send a request", "Aika buƙata")}
+                </a>
                 {seed.identity.phone.map((phone) => (
                   <a className="phone-row" key={phone} href={`tel:${phone}`}>
                     <Phone size={20} />
@@ -479,7 +487,7 @@ export default function App() {
               {t("Knowledge. Worship. Community.", "Ilimi. Ibada. Al’umma.")}
             </p>
             <span className="location">
-              <MapPin size={14} /> Kabama Layout, Zaria, Nigeria
+              <MapPin size={14} /> {seed.identity.location}
             </span>
           </div>
           <div>
@@ -1306,7 +1314,9 @@ function Blog({
               onChange={(e) => setCategory(e.target.value)}
             >
               {categories.map((c) => (
-                <option key={c} value={c}>{c === "All" ? t("All", "Duka") : c}</option>
+                <option key={c} value={c}>
+                  {c === "All" ? t("All", "Duka") : c}
+                </option>
               ))}
             </select>
           </label>

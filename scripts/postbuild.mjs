@@ -11,7 +11,7 @@ const org = {
   telephone: ["+2348062292438", "+2347038889325"],
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Kabama Layout",
+    streetAddress: "Plot 268371, Ibrahim Khalid road, Kabama Layout",
     addressLocality: "Zaria",
     addressRegion: "Kaduna State",
     addressCountry: "NG",
