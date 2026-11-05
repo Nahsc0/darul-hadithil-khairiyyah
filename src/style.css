@@ -216,9 +216,6 @@ header {
 .text-link:hover {
   border-color: var(--green);
 }
-.menu-button {
-  display: none !important;
-}
 .icon-button {
   display: inline-flex;
   align-items: center;
