@@ -22,6 +22,38 @@ async function sendIntake(body: Record<string, FormDataEntryValue>) {
 
 type T = (en: string, ha: string) => string;
 
+const hijriMonths = [
+  "Muharram",
+  "Safar",
+  "Rabi I",
+  "Rabi II",
+  "Jumada I",
+  "Jumada II",
+  "Rajab",
+  "Shaban",
+  "Ramadan",
+  "Shawwal",
+  "Dhul Qadah",
+  "Dhul Hijjah",
+];
+const hijriDate = new Intl.DateTimeFormat("en-GB", {
+  calendar: "islamic-civil",
+  numberingSystem: "latn",
+  timeZone: "Africa/Lagos",
+  day: "numeric",
+  month: "numeric",
+  year: "numeric",
+});
+
+function formatHijri(date: Date) {
+  // Use numeric calendar parts because month and era labels vary by device.
+  const parts = hijriDate.formatToParts(date);
+  const day = parts.find(({ type }) => type === "day")?.value;
+  const month = Number(parts.find(({ type }) => type === "month")?.value);
+  const year = parts.find(({ type }) => type === "year")?.value;
+  return `${day} ${hijriMonths[month - 1]} ${year} AH`;
+}
+
 export function Calendar({ t, locale }: { t: T; locale: string }) {
   const today = todayLagos();
   const [month, setMonth] = useState(
@@ -30,12 +62,6 @@ export function Calendar({ t, locale }: { t: T; locale: string }) {
   const format = (options: Intl.DateTimeFormatOptions) =>
     new Intl.DateTimeFormat(locale, { ...options, timeZone: "Africa/Lagos" });
   const gregorian = format({ calendar: "gregory", dateStyle: "full" });
-  const hijri = format({
-    calendar: "islamic-civil",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
   const title = format({ calendar: "gregory", month: "long", year: "numeric" });
   const year = month.getUTCFullYear();
   const index = month.getUTCMonth();
@@ -90,7 +116,7 @@ export function Calendar({ t, locale }: { t: T; locale: string }) {
               aria-current={iso === today ? "date" : undefined}
             >
               <strong aria-label={gregorian.format(date)}>{i + 1}</strong>
-              <small>{hijri.format(date)}</small>
+              <small>{formatHijri(date)}</small>
             </time>
           );
         })}
