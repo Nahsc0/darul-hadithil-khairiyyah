@@ -24,6 +24,7 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
+          VITE_INTAKE_URL: ${{ vars.VITE_INTAKE_URL || 'https://script.google.com/macros/s/AKfycbztkK4aZWc75BOcAbyR0W8n0c-Ebn7gMytv0m1yCT_Bv0FED6LqV-QyyNtpPc3X_BLR/exec' }}
           BASE_PATH: /darul-hadithil-khairiyyah/
           SITE_URL: https://nahsc0.github.io/darul-hadithil-khairiyyah/
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}

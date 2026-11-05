@@ -1,6 +1,25 @@
 import { useState, type FormEvent } from "react";
 import { supabase, todayLagos } from "./lib";
 
+const intakeUrl = import.meta.env.VITE_INTAKE_URL?.trim();
+const intakeAvailable = Boolean(intakeUrl || supabase);
+
+async function sendIntake(body: Record<string, FormDataEntryValue>) {
+  if (intakeUrl) {
+    const response = await fetch(intakeUrl, {
+      method: "POST",
+      body: JSON.stringify(body),
+      credentials: "omit",
+      signal: AbortSignal.timeout(45000),
+    });
+    if (!response.ok) throw new Error("Intake request failed");
+    return response.json();
+  }
+  const result = await supabase?.functions.invoke("intake", { body });
+  if (!result || result.error) throw new Error("Intake request failed");
+  return result.data;
+}
+
 type T = (en: string, ha: string) => string;
 
 export function Calendar({ t, locale }: { t: T; locale: string }) {
@@ -126,7 +145,7 @@ export function IntakeForm({ t, student }: { t: T; student: boolean }) {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!supabase || pending) return;
+    if (!intakeAvailable || pending) return;
     const fields = Object.fromEntries(new FormData(event.currentTarget));
     const payload = JSON.stringify(fields);
     const token =
@@ -135,11 +154,12 @@ export function IntakeForm({ t, student }: { t: T; student: boolean }) {
     setPending(true);
     setError(false);
     try {
-      const { data, error } = await supabase.functions.invoke("intake", {
-        body: { ...fields, token, kind: student ? "registration" : "request" },
+      const data = await sendIntake({
+        ...fields,
+        token,
+        kind: student ? "registration" : "request",
       });
       if (
-        error ||
         data?.ok !== true ||
         (student && !/^DHK-[0-9A-F-]{36}$/.test(data.studentId))
       ) {
@@ -187,7 +207,7 @@ export function IntakeForm({ t, student }: { t: T; student: boolean }) {
                   "Masallaci zai yi amfani da bayanan tuntuɓarka don amsa buƙatarka.",
                 )}
           </p>
-          <fieldset disabled={pending || !supabase}>
+          <fieldset disabled={pending || !intakeAvailable}>
             <label>
               {student
                 ? t("Student’s full name", "Cikakken sunan ɗalibi")
@@ -266,7 +286,7 @@ export function IntakeForm({ t, student }: { t: T; student: boolean }) {
               {pending ? t("Sending…", "Ana aikawa…") : t("Submit", "Aika")}
             </button>
           </fieldset>
-          {!supabase && (
+          {!intakeAvailable && (
             <p role="status">
               {t(
                 "Online submissions are unavailable. Please call the Masjid.",

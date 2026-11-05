@@ -5,7 +5,8 @@ function doPost(event) {
     if (raw.length > 10000) return reply({ ok: false });
     const input = JSON.parse(raw);
     const secret = props.getProperty("INTAKE_SECRET");
-    if (!secret || input.secret !== secret) return reply({ ok: false });
+    if (props.getProperty("INTAKE_PUBLIC") !== "true" &&
+        (!secret || input.secret !== secret)) return reply({ ok: false });
 
     const token = input.token;
     if (typeof token !== "string" || !/^[a-f0-9-]{36}$/.test(token)) {

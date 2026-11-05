@@ -52,6 +52,8 @@ The intake backend uses a private Google Sheet with `Registrations` and `Request
 4. Configure the existing `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` variables in the GitHub Pages workflow as described below. Rebuild and deploy.
 5. Submit two synthetic student applications and one synthetic request. Check that each appears on its intended tab and the student IDs are different. Retry a submission using the same token and verify the existing ID is returned without a second row. Remove the synthetic records before opening the forms to the public.
 
+For deployments without a Supabase project, use the same Apps Script as a direct intake endpoint. Set the script property `INTAKE_PUBLIC` to `true` and set the GitHub Actions variable `VITE_INTAKE_URL` to the deployed `/exec` URL. Rebuild GitHub Pages. This endpoint accepts anonymous submissions to the two intake tabs and returns a receipt. Keep the spreadsheet private. The browser sends a simple POST and follows the Apps Script response redirect.
+
 The registration ID identifies a received application. The Apps Script checks IDs and retry tokens under a lock and confirms receipt after writing the row. When moving to another database, keep the same function response and preserve existing IDs. Use unique constraints on student IDs and submission tokens in the replacement store.
 
 ## Enable secure staff management

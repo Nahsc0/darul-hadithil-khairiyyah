@@ -49,6 +49,9 @@ const nav = [
   ["/videos", "Videos", "Bidiyo"],
   ["/calendar", "Calendar", "Kalanda"],
   ["/education", "Education", "Ilimi"],
+  ["/register", "Student registration", "Rajistar ɗalibai"],
+  ["/requests", "Send a request", "Aika buƙata"],
+  ["/contact", "Contact", "Tuntuɓa"],
 ];
 export default function App() {
   const [locale, setLocale] = useState<Locale>(() =>
@@ -125,6 +128,7 @@ export default function App() {
             </span>
           </a>
           <nav
+            id="main-navigation"
             aria-label={t("Main navigation", "Babban kewayawa")}
             className={menu ? "open" : ""}
           >
@@ -132,6 +136,7 @@ export default function App() {
               <a
                 key={url}
                 href={`#${url}`}
+                onClick={() => setMenu(false)}
                 aria-current={path === url ? "page" : undefined}
               >
                 {t(en, ha)}
@@ -155,6 +160,7 @@ export default function App() {
               className="menu-button icon-button"
               onClick={() => setMenu(!menu)}
               aria-expanded={menu}
+              aria-controls="main-navigation"
               aria-label={t("Toggle menu", "Buɗe ko rufe menu")}
             >
               {menu ? <X /> : <Menu />}
