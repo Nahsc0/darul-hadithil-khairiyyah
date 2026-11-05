@@ -40,6 +40,7 @@ import {
 import Admin from "./Admin";
 import { Calendar, Education, IntakeForm } from "./Community";
 type T = (en: string, ha: string) => string;
+const mapAddress = encodeURIComponent(seed.identity.location);
 const nav = [
   ["/", "Home", "Gida"],
   ["/about", "About", "Game da mu"],
@@ -422,6 +423,29 @@ export default function App() {
                 <MapPin />
                 <h2>{t("Find us in Zaria", "Ku same mu a Zariya")}</h2>
                 <p>{seed.identity.location}</p>
+                <iframe
+                  className="contact-map"
+                  title={t(
+                    "Map of the Masjid address",
+                    "Taswirar adireshin masallaci",
+                  )}
+                  src={`https://www.google.com/maps?q=${mapAddress}&output=embed`}
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+                <a
+                  className="text-link"
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${mapAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t(
+                    "Get directions on Google Maps",
+                    "Duba hanyar zuwa masallaci a Google Maps",
+                  )}
+                  <ArrowUpRight size={16} />
+                </a>
                 <p className="muted">
                   {t(
                     "Call for directions before your first visit.",

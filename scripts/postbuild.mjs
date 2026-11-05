@@ -24,7 +24,7 @@ const backend = process.env.VITE_SUPABASE_URL
 const intake = process.env.VITE_INTAKE_URL
   ? "https://script.google.com https://script.googleusercontent.com"
   : "";
-const csp = `default-src 'self'; script-src 'self' 'sha256-${hash}'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' ${backend} ${intake}; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'`;
+const csp = `default-src 'self'; script-src 'self' 'sha256-${hash}'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' ${backend} ${intake}; frame-src https://www.youtube-nocookie.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'`;
 const extra = `<meta http-equiv="Content-Security-Policy" content="${csp}"/><meta name="referrer" content="strict-origin-when-cross-origin"/><link rel="icon" href="./assets/originals/mosque-logo.jpeg"/><link rel="canonical" href="${url}"/><meta property="og:title" content="Darul Hadithil Khairiyyah"/><meta property="og:description" content="Knowledge. Worship. Community. Weekly lectures and community events in Zaria."/><meta property="og:image" content="${url}assets/originals/mosque-logo.jpeg"/><meta property="og:type" content="website"/><meta property="og:url" content="${url}"/><script type="application/ld+json">${JSON.stringify(org)}</script>`;
 await writeFile("dist/index.html", html.replace("</head>", extra + "</head>"));
 await writeFile("dist/404.html", html.replace("</head>", extra + "</head>"));
